@@ -14,13 +14,17 @@ const parseBookData = (bookData) => {
     })
 }
 const bookFieldsParameter = 'key+title+subtitle+first_publish_year+author_name+cover_edition_key+edition_count'
-
+const axiosTimeout = 5000
 
 module.exports = {
     searchBook: async (req, res) => {
         try {
             const offset = (req.params.page - 1) * req.params.size
-            let bookListRaw = await axios.get(`https://openlibrary.org/search.json?q=title:${req.params.bookName}&fields=${bookFieldsParameter}&limit=${req.params.size}&offset=${offset}`).catch(() => { return null })
+            let bookListRaw = await axios({
+                method: 'get',
+                url: `https://openlibrary.org/search.json?q=title:${req.params.bookName}&fields=${bookFieldsParameter}&limit=${req.params.size}&offset=${offset}`,
+                timeout: axiosTimeout
+            }).catch((err) => { return err })
             if (bookListRaw && bookListRaw.status === 200) {
                 let booklistData = bookListRaw.data.docs.map((bookData) => {
                     if (bookData.cover_edition_key) {
@@ -40,20 +44,17 @@ module.exports = {
         }
     },
     getBookGenreList: async (req, res) => {
-        try {
-            const genreList = ['Art', 'Science Fiction', 'Fantasy', 'Biographies', 'Recipes', 'Romance', 'Textbooks', 'Children', 'History', 'Medicine', 'religion', 'Mystery and Detective Stories', 'Plays', 'Music', 'Science'].sort()
-            return res.status(200).json(response(genreList));
-        } catch (error) {
-            if (error.name) {
-                return res.status(400).json(responseError(400, error.name));
-            }
-            return res.status(400).json(responseError(400, error.toString()));
-        }
+        const genreList = ['Art', 'Science Fiction', 'Fantasy', 'Biographies', 'Recipes', 'Romance', 'Textbooks', 'Children', 'History', 'Medicine', 'religion', 'Mystery and Detective Stories', 'Plays', 'Music', 'Science'].sort()
+        return res.status(200).json(response(genreList));
     },
     getBookByGenre: async (req, res) => {
         try {
             const offset = (req.params.page - 1) * req.params.size
-            let bookListRaw = await axios.get(`https://openlibrary.org/search.json?q=subject:${req.params.genre}&limit=${req.params.size}&offset=${offset}`).catch(() => { return null })
+            let bookListRaw = await axios({
+                method: 'get',
+                url: `https://openlibrary.org/search.json?q=subject:${req.params.genre}&limit=${req.params.size}&offset=${offset}`,
+                timeout: axiosTimeout
+            }).then((res) => { return res }).catch((err) => { return err })
             if (bookListRaw && bookListRaw.status === 200) {
                 let booklistData = bookListRaw.data.docs.map((bookData) => {
                     if (bookData.cover_edition_key) {
@@ -75,7 +76,11 @@ module.exports = {
     getBookByAuthor: async (req, res) => {
         try {
             const offset = (req.params.page - 1) * req.params.size
-            let bookListRaw = await axios.get(`https://openlibrary.org/search.json?q=author:${req.params.authorName}&limit=${req.params.size}&offset=${offset}`).catch(() => { return null })
+            let bookListRaw = await axios({
+                method: 'get',
+                url: `https://openlibrary.org/search.json?q=author:${req.params.authorName}&limit=${req.params.size}&offset=${offset}`,
+                timeout: axiosTimeout
+            }).catch((err) => { return err })
             if (bookListRaw && bookListRaw.status === 200) {
                 let booklistData = bookListRaw.data.docs.map((bookData) => {
                     if (bookData.cover_edition_key) {

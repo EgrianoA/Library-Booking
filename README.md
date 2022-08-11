@@ -4,7 +4,7 @@ This is a simple demo backend app for make online appointment system for borrowi
 
 How to run this app :
 1. Pull this repositiory to your local device
-2. Make sure you already installed NodeJS in your device
+2. Make sure you already installed NodeJS & NPM in your device
 3. Open this folder repository using cmd, and input "npm install"
 4. After installation is done, you can run the app with inputting "npm run dev"
 
