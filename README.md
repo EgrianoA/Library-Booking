@@ -10,4 +10,4 @@ How to run this app :
 
 Note : 
 - The storage for this app is dummy (for now). You can check it in helpers > dummyData folder to see the dummy data JSON
-- For play with this app, you can use this postman https://www.getpostman.com/collections/6fccabd662d588aad46d
+- For the API Docs, you can use this postman https://www.getpostman.com/collections/6fccabd662d588aad46d
