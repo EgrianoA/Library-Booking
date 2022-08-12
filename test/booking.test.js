@@ -172,7 +172,8 @@ describe('Booking Controller : Get Schedule list', () => {
             expect(res.body).to.have.property('status').to.equal('success')
             expect(res.body).to.not.have.property('errorCode')
             expect(res.body).to.have.property('data')
-            expect(res.body.data).to.be.a('object')
+            expect(res.body.data).to.be.a('array')
+            expect(res.body.data).to.have.lengthOf.above(0)
             done()
         })
     }).timeout(timeoutLimit);
@@ -202,6 +203,27 @@ describe('Booking Controller : Get Schedule list - invalid page/size', () => {
 describe('Booking Controller : Get Schedule list - not including auth', () => {
     it("Should returning error status", done => {
         chai.request(app).post('/api/booking/schedule-list').send({
+            "page": 1,
+            "size": 2,
+            "date_range": {
+                "from": "24/08/2022",
+                "to": "27/10/2022"
+            },
+        }).end((err, res) => {
+            expect(res.body).to.have.property('status').to.equal('error')
+            expect(res.body).to.have.property('statusCode')
+            expect(res.body).to.have.property('errorCode')
+            expect(res.body).to.have.property('message')
+            done()
+        })
+    }).timeout(timeoutLimit);
+})
+
+describe('Booking Controller : Get Schedule list - invalid jwt token auth', () => {
+    it("Should returning error status", done => {
+        chai.request(app).post('/api/booking/schedule-list').set({
+            "authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyabcasJ1c2VyIjoiMThlMWQwNTgtMjcxZC00YmJjLWEwMjktNTE3MmNlMWExMjcxIiwiaWF0IjoxNjYwMjIwODc0LCJleHAiOjE2NjAzMDcyNzR9.XHll7wgo7F7MkwlH0qtHEk6d-QLVVuKuguU2Paq529c"
+        }).send({
             "page": 1,
             "size": 2,
             "date_range": {

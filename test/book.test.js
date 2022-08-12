@@ -20,10 +20,24 @@ describe('Book Controller : Search book', () => {
     }).timeout(timeoutLimit);
 })
 
-describe('Book Controller : Search book with big size to test if timeout', () => {
-    it("Should returning error status", done => {
-        chai.request(app).get('/api/book/animal/1/200').send().end((err, res) => {
-            expect(res.body).to.have.property('status')
+describe('Book Controller : Search book - invalid query', () => {
+    it("Should returning status 200 but returning 0 array of book data", done => {
+        chai.request(app).get('/api/book/{}/xxx/zzz').send().end((err, res) => {
+            expect(err).to.be.null
+            expect(res.body).to.have.property('status').to.equal('success')
+            expect(res.body).to.not.have.property('errorCode')
+            expect(res.body).to.have.property('data')
+            expect(res.body.data).to.be.a('array')
+            expect(res.body.data).to.have.lengthOf(0)
+            done()
+        })
+    }).timeout(timeoutLimit);
+})
+
+describe('Book Controller : Search book - big page size', () => {
+    it("Should returning error message because timeout limit", done => {
+        chai.request(app).get('/api/book/the/1/5000').send().end((err, res) => {
+            expect(res.body).to.have.property('status').to.equal('error')
             expect(res.body).to.have.property('statusCode')
             expect(res.body).to.have.property('errorCode')
             expect(res.body).to.have.property('message')
@@ -60,9 +74,9 @@ describe('Book Controller : Search book with genre', () => {
     }).timeout(timeoutLimit);
 })
 
-describe('Book Controller : Search book of genre with big size to test if timeout', () => {
-    it("Should returning error status", done => {
-        chai.request(app).get('/api/book/genre/recipe/1/200').send().end((err, res) => {
+describe('Book Controller : Search book with genre - big page size', () => {
+    it("Should returning error message because timeout limit", done => {
+        chai.request(app).get('/api/book/genre/*/1/5000').send().end((err, res) => {
             expect(res.body).to.have.property('status').to.equal('error')
             expect(res.body).to.have.property('statusCode')
             expect(res.body).to.have.property('errorCode')
@@ -71,6 +85,7 @@ describe('Book Controller : Search book of genre with big size to test if timeou
         })
     }).timeout(timeoutLimit);
 })
+
 
 describe('Book Controller : Search book with author', () => {
     it("Should returning status 200 with returning book data", done => {
@@ -86,9 +101,9 @@ describe('Book Controller : Search book with author', () => {
     }).timeout(timeoutLimit);
 })
 
-describe('Book Controller : Search book of author with big size to test if timeout', () => {
-    it("Should returning error status", done => {
-        chai.request(app).get('/api/book/author/rowling/1/200').send().end((err, res) => {
+describe('Book Controller : Search book with genre - big page size', () => {
+    it("Should returning error message because timeout limit", done => {
+        chai.request(app).get('/api/book/author/*/1/5000').send().end((err, res) => {
             expect(res.body).to.have.property('status').to.equal('error')
             expect(res.body).to.have.property('statusCode')
             expect(res.body).to.have.property('errorCode')

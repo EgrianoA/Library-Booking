@@ -29,7 +29,6 @@ describe('User Controller : Signup', () => {
             expect(res.body).to.not.have.property('errorCode')
             expect(res.body).to.have.property('data')
             expect(res.body.data).to.be.a('object')
-            expect(res.body.data).to.have.lengthOf.above(0)
             done()
         })
     }).timeout(timeoutLimit);
@@ -110,7 +109,6 @@ describe('User Controller : Login', () => {
             expect(res.body).to.not.have.property('errorCode')
             expect(res.body).to.have.property('data')
             expect(res.body.data).to.be.a('object')
-            expect(res.body.data).to.have.lengthOf.above(0)
             done()
         })
     }).timeout(timeoutLimit);
