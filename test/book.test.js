@@ -6,6 +6,15 @@ const app = require('../app')
 chai.use(chaiHttp)
 const timeoutLimit = 10000
 
+describe('General test : Check if invalid enpoint', () => {
+    it("Should returning 404", done => {
+        chai.request(app).get('/api/abc').send().end((err, res) => {
+            expect(res.status).to.equal(404)
+            done()
+        })
+    }).timeout(timeoutLimit);
+})
+
 describe('Book Controller : Search book', () => {
     it("Should returning status 200 with returning array of book data", done => {
         chai.request(app).get('/api/book/harry potter/1/2').send().end((err, res) => {
